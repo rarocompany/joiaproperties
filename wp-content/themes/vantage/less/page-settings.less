@@ -1,0 +1,67 @@
+/* The Page Setting related layout changes */
+
+.page-layout-no-masthead-margin {
+	#main {
+		padding-top: 0;
+	}
+}
+
+.page-layout-no-footer-margin {
+	#main {
+		padding-bottom: 0;
+	}
+}
+
+:not(.not-default-page) {
+	&.page-layout-no-sidebar {
+		#primary {
+			width: 100%;
+		}
+	}
+
+	&.page-layout-full-width.layout-full {
+		#page-wrapper .full-container {
+			max-width: 100%;
+		}
+		#primary {
+			width: 100%;
+		}
+	}
+
+	&.page-layout-full-width-sidebar.layout-full {
+		#page-wrapper .full-container {
+			max-width: 100%;
+		}
+	}
+
+	&.page-layout-full-width.layout-boxed {
+		#primary {
+			width: 100%;
+		}
+	}
+
+	&.page-layout-full-width-sidebar.layout-boxed,
+	&.page-layout-full-width.layout-boxed {
+		#page-wrapper {
+			width: 100%;
+			max-width: 100%;
+			padding-right: 20px;
+			padding-left: 20px;
+
+			@media ( max-width: 1100px ) {
+				padding-right: 0;
+				padding-left: 0;
+			}
+		}
+
+		@media ( min-width: 1100px ) {
+			.main-navigation.use-sticky-menu.sticky {
+				left: 0;
+				margin: 0 auto;
+				max-width: calc(100% - 40px);
+				right: 0;
+				width: 100%;
+			}
+		}
+	}
+}

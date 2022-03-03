@@ -1,0 +1,14 @@
+.customize-control-siteorigin-widget-setting .so-widget-form {
+  background: #fff;
+  border-right: 1px solid #dddddd;
+  box-sizing: border-box;
+  display: none;
+  height: 100%;
+  left: 300px;
+  max-width: 650px;
+  overflow-y: auto;
+  padding: 25px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100; }
