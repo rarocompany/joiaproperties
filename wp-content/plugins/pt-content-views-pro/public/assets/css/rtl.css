@@ -1,0 +1,25 @@
+/**
+ * Contains CSS which can't connect to .pt-cv-rtl
+ */
+
+.pt-cv-gls-menu, .pt-cv-gls-menu li {
+	float: right !important;
+}
+
+.pt-cv-filter-bar, .btn-group.pt-cv-filter-bar, .pt-cv-filter-operator label {
+	float: right !important;
+}
+
+.breadcrumb.pt-cv-filter-bar>li, .pt-cv-filter-option {
+	float: right !important;
+}
+
+.pt-cv-filter-group li {
+	clear: both;
+}
+
+.breadcrumb.pt-cv-filter-bar li:first-child:before {
+    content: "/\00a0";
+    padding: 0 5px;
+    color: #ccc;
+}
