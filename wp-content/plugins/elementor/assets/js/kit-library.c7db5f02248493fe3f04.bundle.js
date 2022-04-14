@@ -1,4 +1,4 @@
-/*! elementor - v3.6.1 - 23-03-2022 */
+/*! elementor - v3.6.4 - 13-04-2022 */
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["kit-library"],{
 
 /***/ "../core/app/modules/kit-library/assets/js/components/badge.scss":
@@ -191,6 +191,60 @@
 
 /***/ }),
 
+/***/ "../core/app/assets/js/molecules/elementor-loading.js":
+/*!************************************************************!*\
+  !*** ../core/app/assets/js/molecules/elementor-loading.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+/* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
+
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports["default"] = ElementorLoading;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+
+function ElementorLoading(props) {
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loading"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-wrapper"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-boxes"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-box"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-box"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-box"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-box"
+  }))), /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loading-title"
+  }, props.loadingText)));
+}
+
+ElementorLoading.propTypes = {
+  loadingText: PropTypes.string
+};
+ElementorLoading.defaultProps = {
+  loadingText: __('Loading', 'elementor')
+};
+
+/***/ }),
+
 /***/ "../core/app/assets/js/ui/popover-dialog/popover-dialog.js":
 /*!*****************************************************************!*\
   !*** ../core/app/assets/js/ui/popover-dialog/popover-dialog.js ***!
@@ -221,9 +275,10 @@ function PopoverDialog(props) {
       trigger = props.trigger,
       hideAfter = props.hideAfter,
       popoverRef = (0, _react.useCallback)(function (popoverEl) {
-    var target = targetRef === null || targetRef === void 0 ? void 0 : targetRef.current;
+    var target = targetRef === null || targetRef === void 0 ? void 0 : targetRef.current; // If the target or the popover element does not exist on the page anymore after a re-render, do nothing.
 
-    if (!target) {
+    // If the target or the popover element does not exist on the page anymore after a re-render, do nothing.
+    if (!target || !popoverEl) {
       return;
     }
     /**
@@ -708,52 +763,6 @@ ConnectDialog.propTypes = {
   onSuccess: PropTypes.func.isRequired,
   pageId: PropTypes.string
 };
-
-/***/ }),
-
-/***/ "../core/app/modules/kit-library/assets/js/components/elementor-loading.js":
-/*!*********************************************************************************!*\
-  !*** ../core/app/modules/kit-library/assets/js/components/elementor-loading.js ***!
-  \*********************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
-
-
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports["default"] = ElementorLoading;
-
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
-function ElementorLoading() {
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "elementor-loading"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "elementor-loader-wrapper"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "elementor-loader"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "elementor-loader-boxes"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "elementor-loader-box"
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: "elementor-loader-box"
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: "elementor-loader-box"
-  }), /*#__PURE__*/_react.default.createElement("div", {
-    className: "elementor-loader-box"
-  }))), /*#__PURE__*/_react.default.createElement("div", {
-    className: "elementor-loading-title"
-  }, __('Loading', 'elementor'))));
-}
 
 /***/ }),
 
@@ -4215,7 +4224,7 @@ __webpack_require__(/*! core-js/modules/es6.array.map.js */ "../node_modules/cor
 
 var _content = _interopRequireDefault(__webpack_require__(/*! elementor/core/app/assets/js/layout/content */ "../core/app/assets/js/layout/content.js"));
 
-var _elementorLoading = _interopRequireDefault(__webpack_require__(/*! ../../components/elementor-loading */ "../core/app/modules/kit-library/assets/js/components/elementor-loading.js"));
+var _elementorLoading = _interopRequireDefault(__webpack_require__(/*! elementor-app/molecules/elementor-loading */ "../core/app/assets/js/molecules/elementor-loading.js"));
 
 var _itemHeader = _interopRequireDefault(__webpack_require__(/*! ../../components/item-header */ "../core/app/modules/kit-library/assets/js/components/item-header.js"));
 
@@ -4470,7 +4479,7 @@ __webpack_require__(/*! core-js/modules/es6.regexp.split.js */ "../node_modules/
 
 __webpack_require__(/*! core-js/modules/es6.array.find.js */ "../node_modules/core-js/modules/es6.array.find.js");
 
-var _elementorLoading = _interopRequireDefault(__webpack_require__(/*! ../../components/elementor-loading */ "../core/app/modules/kit-library/assets/js/components/elementor-loading.js"));
+var _elementorLoading = _interopRequireDefault(__webpack_require__(/*! elementor-app/molecules/elementor-loading */ "../core/app/assets/js/molecules/elementor-loading.js"));
 
 var _itemHeader = _interopRequireDefault(__webpack_require__(/*! ../../components/item-header */ "../core/app/modules/kit-library/assets/js/components/item-header.js"));
 
@@ -4685,4 +4694,4 @@ exports["default"] = _default;
 /***/ })
 
 }]);
-//# sourceMappingURL=kit-library.4b8e9bb062f992326c78.bundle.js.map
+//# sourceMappingURL=kit-library.c7db5f02248493fe3f04.bundle.js.map

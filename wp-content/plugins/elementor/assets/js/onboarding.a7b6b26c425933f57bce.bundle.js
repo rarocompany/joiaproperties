@@ -1,6 +1,59 @@
-/*! elementor - v3.6.2 - 04-04-2022 */
+/*! elementor - v3.6.4 - 13-04-2022 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["onboarding"],{
+
+/***/ "../core/app/assets/js/molecules/elementor-loading.js":
+/*!************************************************************!*\
+  !*** ../core/app/assets/js/molecules/elementor-loading.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+/* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
+
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports["default"] = ElementorLoading;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+
+function ElementorLoading(props) {
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loading"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-wrapper"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-boxes"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-box"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-box"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-box"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loader-box"
+  }))), /*#__PURE__*/_react.default.createElement("div", {
+    className: "elementor-loading-title"
+  }, props.loadingText)));
+}
+
+ElementorLoading.propTypes = {
+  loadingText: PropTypes.string
+};
+ElementorLoading.defaultProps = {
+  loadingText: __('Loading', 'elementor')
+};
+
+/***/ }),
 
 /***/ "../core/app/assets/js/ui/popover-dialog/popover-dialog.js":
 /*!*****************************************************************!*\
@@ -31,9 +84,10 @@ function PopoverDialog(props) {
       trigger = props.trigger,
       hideAfter = props.hideAfter,
       popoverRef = (0, _react.useCallback)(function (popoverEl) {
-    var target = targetRef === null || targetRef === void 0 ? void 0 : targetRef.current;
+    var target = targetRef === null || targetRef === void 0 ? void 0 : targetRef.current; // If the target or the popover element does not exist on the page anymore after a re-render, do nothing.
 
-    if (!target) {
+    // If the target or the popover element does not exist on the page anymore after a re-render, do nothing.
+    if (!target || !popoverEl) {
       return;
     }
     /**
@@ -564,9 +618,14 @@ function GoProPopover(props) {
 
       window.open(alreadyHaveProButton.href + '&mode=popup', 'elementorUploadPro', "toolbar=no, menubar=no, width=728, height=531, top=100, left=100"); // Run the callback for when the upload succeeds.
 
-      elementorCommon.elements.$window.on('elementor/upload-and-install-pro/success/', function () {
+      elementorCommon.elements.$body.on('elementor/upload-and-install-pro/success', function () {
         updateState({
-          hasPro: true
+          hasPro: true,
+          proNotice: {
+            type: 'success',
+            icon: 'eicon-check-circle-o',
+            message: __('Elementor Pro has been successfully installed.', 'elementor')
+          }
         });
       });
     });
@@ -812,9 +871,10 @@ function Layout(props) {
     });
     updateState({
       currentStep: props.pageId,
-      nextStep: props.nextStep || ''
+      nextStep: props.nextStep || '',
+      proNotice: null
     });
-  }, []);
+  }, [props.pageId]);
 
   var _useContext = (0, _react.useContext)(_context.OnboardingContext),
       state = _useContext.state,
@@ -826,9 +886,21 @@ function Layout(props) {
     text: __('Create Account', 'elementor-pro'),
     hideText: false,
     elRef: (0, _react.useRef)(),
-    url: elementorAppConfig.onboarding.urls.connect + elementorAppConfig.onboarding.utms.connectTopBar,
+    url: elementorAppConfig.onboarding.urls.signUp + elementorAppConfig.onboarding.utms.connectTopBar,
     target: '_blank',
-    rel: 'opener'
+    rel: 'opener',
+    onClick: function onClick() {
+      elementorCommon.events.dispatchEvent({
+        event: 'create account',
+        version: '',
+        details: {
+          placement: elementorAppConfig.onboarding.eventPlacement,
+          step: state.currentStep,
+          source: 'header',
+          contributor: state.isUsageDataShared
+        }
+      });
+    }
   };
 
   if (state.isLibraryConnected) {
@@ -837,8 +909,20 @@ function Layout(props) {
       text: __('My Elementor', 'elementor-pro'),
       hideText: false,
       icon: 'eicon-user-circle-o',
-      url: 'https://my.elementor.com/',
-      target: '_blank'
+      url: 'https://my.elementor.com/?utm_source=onboarding-wizard&utm_medium=wp-dash&utm_campaign=my-account&utm_content=top-bar&utm_term=' + elementorAppConfig.onboarding.onboardingVersion,
+      target: '_blank',
+      onClick: function onClick() {
+        elementorCommon.events.dispatchEvent({
+          event: 'my elementor click',
+          version: '',
+          details: {
+            placement: elementorAppConfig.onboarding.eventPlacement,
+            step: state.currentStep,
+            source: 'header',
+            contributor: state.isUsageDataShared
+          }
+        });
+      }
     });
   } else {
     headerButtons.push(createAccountButton);
@@ -905,13 +989,17 @@ var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
 
+var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
+
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
 
 exports["default"] = PageContentLayout;
 
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+
+var _context = __webpack_require__(/*! ../../context/context */ "../core/app/modules/onboarding/assets/js/context/context.js");
 
 var _grid = _interopRequireDefault(__webpack_require__(/*! elementor-app/ui/grid/grid */ "../core/app/assets/js/ui/grid/grid.js"));
 
@@ -920,6 +1008,17 @@ var _notice = _interopRequireDefault(__webpack_require__(/*! ../notice */ "../co
 var _footerButtons = _interopRequireDefault(__webpack_require__(/*! ./footer-buttons */ "../core/app/modules/onboarding/assets/js/components/layout/footer-buttons.js"));
 
 function PageContentLayout(props) {
+  var _useContext = (0, _react.useContext)(_context.OnboardingContext),
+      state = _useContext.state;
+
+  var printNotices = function printNotices() {
+    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, props.noticeState && /*#__PURE__*/_react.default.createElement(_notice.default, {
+      noticeState: props.noticeState
+    }), state.proNotice && /*#__PURE__*/_react.default.createElement(_notice.default, {
+      noticeState: state.proNotice
+    }));
+  };
+
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_grid.default, {
     container: true,
     alignItems: "center",
@@ -938,9 +1037,7 @@ function PageContentLayout(props) {
     alt: "Information"
   }))), /*#__PURE__*/_react.default.createElement("div", {
     className: "e-onboarding__notice-container"
-  }, props.noticeState ? /*#__PURE__*/_react.default.createElement(_notice.default, {
-    noticeState: props.noticeState
-  }) : /*#__PURE__*/_react.default.createElement("div", {
+  }, props.noticeState || state.proNotice ? printNotices() : /*#__PURE__*/_react.default.createElement("div", {
     className: "e-onboarding__notice-empty-spacer"
   })), /*#__PURE__*/_react.default.createElement(_footerButtons.default, {
     actionButton: props.actionButton,
@@ -1276,6 +1373,7 @@ function ContextProvider(props) {
     trackerCheckboxChecked: onboardingConfig.isUserDataShared,
     siteName: onboardingConfig.siteName,
     siteLogo: onboardingConfig.siteLogo,
+    proNotice: '',
     currentStep: '',
     nextStep: '',
     steps: {
@@ -1445,7 +1543,7 @@ function Account() {
     };
   } else {
     actionButton.text = __('Create my account', 'elementor');
-    actionButton.href = elementorAppConfig.onboarding.urls.connect + elementorAppConfig.onboarding.utms.connectCta;
+    actionButton.href = elementorAppConfig.onboarding.urls.signUp + elementorAppConfig.onboarding.utms.connectCta;
     actionButton.ref = actionButtonRef;
 
     actionButton.onClick = function () {
@@ -2171,6 +2269,17 @@ function SiteLogo() {
       uploadSiteLogo(selectedFile);
     }
   };
+
+  var onImageRemoveClick = function onImageRemoveClick() {
+    elementorCommon.events.dispatchEvent({
+      event: 'remove selected logo',
+      version: '',
+      details: {
+        placement: elementorAppConfig.onboarding.eventPlacement
+      }
+    });
+    setFile(null);
+  };
   /**
    * Ajax Callbacks
    */
@@ -2187,7 +2296,6 @@ function SiteLogo() {
           version: '',
           details: {
             placement: elementorAppConfig.onboarding.eventPlacement,
-            step: state.currentStep,
             source: fileSource
           }
         });
@@ -2227,7 +2335,8 @@ function SiteLogo() {
           event: 'logo image updated',
           version: '',
           details: {
-            placement: elementorAppConfig.onboarding.eventPlacement
+            placement: elementorAppConfig.onboarding.eventPlacement,
+            source: fileSource
           }
         });
         setIsUploading(false);
@@ -2277,7 +2386,7 @@ function SiteLogo() {
   }, /*#__PURE__*/_react.default.createElement("div", {
     className: "e-onboarding__logo-remove",
     onClick: function onClick() {
-      return setFile(null);
+      return onImageRemoveClick();
     }
   }, /*#__PURE__*/_react.default.createElement("i", {
     className: "eicon-trash-o"
@@ -2309,7 +2418,8 @@ function SiteLogo() {
         event: 'browse file click',
         version: '',
         details: {
-          placement: elementorAppConfig.onboarding.eventPlacement
+          placement: elementorAppConfig.onboarding.eventPlacement,
+          step: state.currentStep
         }
       });
     } // TODO: DEAL WITH ERROR
@@ -2545,24 +2655,36 @@ var _dropZone = _interopRequireDefault(__webpack_require__(/*! ../../../../../as
 
 var _notice = _interopRequireDefault(__webpack_require__(/*! ../components/notice */ "../core/app/modules/onboarding/assets/js/components/notice.js"));
 
+var _context = __webpack_require__(/*! ../context/context */ "../core/app/modules/onboarding/assets/js/context/context.js");
+
+var _elementorLoading = _interopRequireDefault(__webpack_require__(/*! elementor-app/molecules/elementor-loading */ "../core/app/assets/js/molecules/elementor-loading.js"));
+
 function UploadAndInstallPro() {
   (0, _usePageTitle.default)({
     title: __('Upload and Install Elementor Pro', 'elementor')
   });
 
-  var _useAjax = (0, _useAjax2.default)(),
+  var _useContext = (0, _react.useContext)(_context.OnboardingContext),
+      state = _useContext.state,
+      updateState = _useContext.updateState,
+      _useAjax = (0, _useAjax2.default)(),
       installProZipAjaxState = _useAjax.ajaxState,
       setInstallProZipAjaxState = _useAjax.setAjax,
       _useState = (0, _react.useState)(null),
       _useState2 = (0, _slicedToArray2.default)(_useState, 2),
       noticeState = _useState2[0],
       setNoticeState = _useState2[1],
-      _useState3 = (0, _react.useState)(),
+      _useState3 = (0, _react.useState)(false),
       _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
-      fileSource = _useState4[0],
-      setFileSource = _useState4[1];
+      isLoading = _useState4[0],
+      setIsLoading = _useState4[1],
+      _useState5 = (0, _react.useState)(),
+      _useState6 = (0, _slicedToArray2.default)(_useState5, 2),
+      fileSource = _useState6[0],
+      setFileSource = _useState6[1];
 
   var uploadProZip = (0, _react.useCallback)(function (file) {
+    setIsLoading(true);
     setInstallProZipAjaxState({
       data: {
         action: 'elementor_upload_and_install_pro',
@@ -2573,6 +2695,7 @@ function UploadAndInstallPro() {
 
   var setErrorNotice = function setErrorNotice() {
     var error = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    var step = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'upload';
     var errorMessage = (error === null || error === void 0 ? void 0 : error.message) || 'That didn\'t work. Try uploading your file again.';
     elementorCommon.events.dispatchEvent({
       event: 'indication prompt',
@@ -2581,7 +2704,8 @@ function UploadAndInstallPro() {
         placement: elementorAppConfig.onboarding.eventPlacement,
         step: state.currentStep,
         action_state: 'failure',
-        action: 'install pro'
+        action: step + ' pro',
+        source: fileSource
       }
     });
     setNoticeState({
@@ -2600,6 +2724,8 @@ function UploadAndInstallPro() {
     if ('initial' !== installProZipAjaxState.status) {
       var _installProZipAjaxSta;
 
+      setIsLoading(false);
+
       if ('success' === installProZipAjaxState.status && (_installProZipAjaxSta = installProZipAjaxState.response) !== null && _installProZipAjaxSta !== void 0 && _installProZipAjaxSta.elementorProInstalled) {
         elementorCommon.events.dispatchEvent({
           event: 'pro uploaded',
@@ -2612,12 +2738,12 @@ function UploadAndInstallPro() {
         });
 
         if (opener && opener !== window) {
-          opener.jQuery('body').trigger('elementor/upload-and-install-pro/success/');
+          opener.jQuery('body').trigger('elementor/upload-and-install-pro/success');
           window.close();
           opener.focus();
         }
       } else if ('error' === installProZipAjaxState.status) {
-        setErrorNotice();
+        setErrorNotice('install');
       }
     }
   }, [installProZipAjaxState.status]);
@@ -2633,6 +2759,12 @@ function UploadAndInstallPro() {
     });
   };
 
+  if (isLoading) {
+    return /*#__PURE__*/_react.default.createElement(_elementorLoading.default, {
+      loadingText: __('Uploading', 'elementor')
+    });
+  }
+
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "eps-app e-onboarding__upload-pro"
   }, /*#__PURE__*/_react.default.createElement(_content.default, null, /*#__PURE__*/_react.default.createElement(_dropZone.default, {
@@ -2642,7 +2774,7 @@ function UploadAndInstallPro() {
       uploadProZip(file);
     },
     onError: function onError(error) {
-      return setErrorNotice(error);
+      return setErrorNotice(error, 'upload');
     },
     filetypes: ['zip'],
     buttonColor: "cta",
@@ -2729,4 +2861,4 @@ Connect.propTypes = {
 /***/ })
 
 }]);
-//# sourceMappingURL=onboarding.66bf71bdf71c8fd6b18a.bundle.js.map
+//# sourceMappingURL=onboarding.a7b6b26c425933f57bce.bundle.js.map
